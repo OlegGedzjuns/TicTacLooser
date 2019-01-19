@@ -9,11 +9,11 @@ private:
 public:
 	Player_class(char myFigure, char enemyFigure);
 
-	void FillMask(char map[10][10], int mask[10][10]);
+	void FillMask(char map[11][11], int mask[10][10]);
 
-	void CreateMask(char map[10][10], int mask[10][10]);
-	void CheckHorisontals(char map[10][10], int mask[10][10]);
-	void CheckVerticals(char map[10][10], int mask[10][10]);
-	void CheckDiagonals(char map[10][10], int mask[10][10]);
+	void CreateMask(char map[11][11], int mask[10][10]);
+	void CheckHorisontals(int mask[10][10]);
+	void CheckVerticals(int mask[10][10]);
+	void CheckDiagonals(int mask[10][10]);
 };
 

@@ -15,7 +15,7 @@ Communication_class::~Communication_class()
 
 void Communication_class::PrintInfo()
 {
-	_outputF << "Oleg Gedzjuns\nRTU DPS, C2\n";
+	_outputF << "Oleg Gedzjuns\ndev v1\n";
 }
 
 void Communication_class::PrintPos(char c, int i)
@@ -28,10 +28,10 @@ char Communication_class::GetFigure()
 	return _figure;
 }
 
-void Communication_class::GetMap(char map[10][10])
+void Communication_class::GetMap(char map[11][11])
 {
 	for (int i = 0; i < 10; i++)
 	{
-		_inputF.getline(map[i], 10);
+		_inputF.getline(map[i], 11, '\n');
 	}
 }
