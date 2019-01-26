@@ -50,32 +50,35 @@ void Game_class::TakeAStep()
 
 Coords Game_class::FindBest(int pMask[10][10], int eMask[10][10])
 {
-	int finalMap[10][10];
-	int maxY = 0, maxX = 0;
-	for (int i = 0; i < 10; i++)
+	int eMaxY = 0, eMaxX = 0;
+	int pMaxY = 0, pMaxX = 0;
+	for (int Y = 0; Y < 10; Y++)
 	{
-		for (int j = 0; j < 10; j++)
+		for (int X = 0; X < 10; X++)
 		{
-			if (pMask[i][j] == -1 || pMask[i][j] == -2 || eMask[i][j] == -1 || eMask[i][j] == -2)
+			if (eMask[eMaxY][eMaxX] < eMask[Y][X])
 			{
-				continue;
+				eMaxY = Y;
+				eMaxX = X;
 			}
-			else
+			if (pMask[pMaxY][pMaxX] < pMask[Y][X])
 			{
-				finalMap[i][j] = pMask[i][j] - eMask[i][j];
+				pMaxY = Y;
+				pMaxX = X;
 			}
 		}
 	}
-	for (int i = 0; i < 10; i++)
+	if (eMask[eMaxY][eMaxX] >= 4)
 	{
-		for (int j = 0; j < 10; j++)
-		{
-			if (finalMap[i][j] > finalMap[maxY][maxX])
-			{
-				maxY = i;
-				maxX = j;
-			}
-		}
+		return { eMaxX, eMaxY };
 	}
-	return { maxX , maxY };
+	if (pMask[pMaxY][pMaxX] >= 3)
+	{
+		return { pMaxX, pMaxY };
+	}
+	if (eMask[eMaxY][eMaxX] >= 2)
+	{
+		return { eMaxX, eMaxY };
+	}
+	return { pMaxX, pMaxY };
 }

@@ -4,7 +4,6 @@
 
 using namespace std;
 
-
 Player_class::Player_class(char myFigure, char enemyFigure)
 {
 	_myFigure = myFigure;
@@ -14,9 +13,16 @@ Player_class::Player_class(char myFigure, char enemyFigure)
 void Player_class::FillMask(char map[11][11], int mask[10][10])
 {
 	CreateMask(map, mask);
-	CheckHorisontals(mask);
-	CheckVerticals(mask);
-	//CheckDiagonals(mask);
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			SetCellValue(mask, i, j);
+			//cout << mask[i][j] << '\t';
+		}
+		//cout << endl;
+	}
+	//system("pause");
 }
 
 void Player_class::CreateMask(char map[11][11], int mask[10][10])
@@ -32,108 +38,84 @@ void Player_class::CreateMask(char map[11][11], int mask[10][10])
 	}
 }
 
-void Player_class::CheckHorisontals(int mask[10][10])
+void Player_class::SetCellValue(int mask[10][10], int y, int x)
 {
-	for (int i = 0; i < 10; i++)
-	{
-		int posToCnt = -1;
-		for (int j = 0; j < 10; j++)
-		{
-			if (posToCnt == -1 && mask[i][j + 1] == -1)
-			{
-				posToCnt = j;
-				continue;
-			}
-			if (posToCnt != -1 && mask[i][j] == -1)
-			{
-				mask[i][posToCnt]++;
-			}
-			else
-			{
-				if (mask[i][j + 1] == -1)
-				{
-					posToCnt = j;
-					continue;
-				}
-				posToCnt = -1;
-			}
-		}
-		posToCnt = -1;
-		for (int j = 9; j >= 0; j--)
-		{
-			if (posToCnt == -1 && mask[i][j - 1] == -1)
-			{
-				posToCnt = j;
-				continue;
-			}
-			if (posToCnt != -1 && mask[i][j] == -1)
-			{
-				mask[i][posToCnt]++;
-			}
-			else
-			{
-				if (mask[i][j - 1] == -1)
-				{
-					posToCnt = j;
-					continue;
-				}
-				posToCnt = -1;
-			}
-		}
-	}
-}
+	if (mask[y][x] == -1 || mask[y][x] == -2)
+		return;
 
-void Player_class::CheckVerticals(int mask[10][10])
-{
-	for (int i = 0; i < 10; i++)
+	Dir direction[4] = 
 	{
-		int posToCnt = -1;
-		for (int j = 0; j < 10; j++)
-		{
-			if (posToCnt == -1 && mask[j + 1][i] == -1 && mask[j][i] != -1 && mask[j][i] != -2)
-			{
-				posToCnt = j;
-				continue;
-			}
-			if (posToCnt != -1 && mask[j][i] == -1)
-			{
-				mask[posToCnt][i]++;
-			}
-			else
-			{
-				if (mask[j + 1][i] == -1 && mask[j][i] != -1 && mask[j][i] != -2)
-				{
-					posToCnt = j;
-					continue;
-				}
-				posToCnt = -1;
-			}
-		}
-		posToCnt = -1;
-		for (int j = 9; j >= 0; j--)
-		{
-			if (posToCnt == -1 && mask[j - 1][i] == -1)
-			{
-				posToCnt = j;
-				continue;
-			}
-			if (posToCnt != -1 && mask[j][i] == -1)
-			{
-				mask[posToCnt][i]++;
-			}
-			else
-			{
-				if (mask[j - 1][i] == -1)
-				{
-					posToCnt = j;
-					continue;
-				}
-				posToCnt = -1;
-			}
-		}
-	}
-}
+		{-1, -1, +1, +1},	// (\)
+		{-1, 0, +1, 0},		// (|)
+		{-1, +1, +1, -1},	// (/)
+		{0, +1, 0, -1}		// (-)
+	};
+	
+	for (int i = 0; i < 4; i++)
+	{
+		bool leftRowEnd = false, leftEnd = false;
+		bool rightRowEnd = false, rightEnd = false;
 
-void Player_class::CheckDiagonals(int mask[10][10])
-{
+		int posibleLen = 1;
+		int rowLen = 0;
+		int radius = 1;
+		while (!leftEnd || !rightEnd)
+		{
+			if (!leftEnd)
+			{
+				int checkY = y + (radius * direction[i].lY);
+				int checkX = x + (radius * direction[i].lX);
+				if (checkY < 0 || checkY > 9 || checkX < 0 || checkX > 9)
+				{
+					leftEnd = true;
+				}
+				else
+				{
+					if (mask[checkY][checkX] == -1 && !leftRowEnd)
+					{
+						rowLen++;
+						posibleLen++;
+					}
+					else if (mask[checkY][checkX] != -2 && posibleLen < 5)
+					{
+						leftRowEnd = true;
+						posibleLen++;
+					}
+					else
+					{
+						leftEnd = true;
+					}
+				}
+			}
+			if (!rightEnd)
+			{
+				int checkY = y + (radius * direction[i].rY);
+				int checkX = x + (radius * direction[i].rX);
+				if (checkY < 0 || checkY > 9 || checkX < 0 || checkX > 9)
+				{
+					rightEnd = true;
+				}
+				else
+				{
+					if (mask[checkY][checkX] == -1 && !rightRowEnd)
+					{
+						rowLen++;
+						posibleLen++;
+					}
+					else if (mask[checkY][checkX] != -2 && posibleLen < 5)
+					{
+						rightRowEnd = true;
+						posibleLen++;
+					}
+					else
+					{
+						rightEnd = true;
+					}
+				}
+			}
+			radius++;
+		}
+		if (rowLen > mask[y][x] && posibleLen >= 5)
+			mask[y][x] = rowLen;
+	}
 }
