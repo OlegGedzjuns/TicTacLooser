@@ -23,6 +23,7 @@
     <ProjectGuid>{A833D50B-EE4D-4D9D-8C01-C68C91D6DA3F}</ProjectGuid>
     <RootNamespace>ManagerTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>SantaXO</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
