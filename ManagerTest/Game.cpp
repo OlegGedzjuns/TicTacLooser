@@ -56,12 +56,12 @@ Coords Game_class::FindBest(int pMask[10][10], int eMask[10][10])
 	{
 		for (int X = 0; X < 10; X++)
 		{
-			if (eMask[eMaxY][eMaxX] < eMask[Y][X])
+			if (eMask[eMaxY][eMaxX] <= eMask[Y][X])
 			{
 				eMaxY = Y;
 				eMaxX = X;
 			}
-			if (pMask[pMaxY][pMaxX] < pMask[Y][X])
+			if (pMask[pMaxY][pMaxX] <= pMask[Y][X])
 			{
 				pMaxY = Y;
 				pMaxX = X;
@@ -77,6 +77,10 @@ Coords Game_class::FindBest(int pMask[10][10], int eMask[10][10])
 		return { pMaxX, pMaxY };
 	}
 	if (eMask[eMaxY][eMaxX] >= 2)
+	{
+		return { eMaxX, eMaxY };
+	}
+	if (pMask[pMaxY][pMaxX] == 0)
 	{
 		return { eMaxX, eMaxY };
 	}

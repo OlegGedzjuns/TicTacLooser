@@ -15,7 +15,7 @@ Communication_class::~Communication_class()
 
 void Communication_class::PrintInfo()
 {
-	_outputF << "Oleg Gedzjuns\nrelease v1\n";
+	_outputF << "Oleg Gedzjuns\nRTU, DPS C2\n";
 }
 
 void Communication_class::PrintPos(char c, int i)

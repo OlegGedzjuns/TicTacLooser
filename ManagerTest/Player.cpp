@@ -12,12 +12,12 @@ Player_class::Player_class(char myFigure, char enemyFigure)
 
 void Player_class::FillMask(char map[11][11], int mask[10][10])
 {
-	CreateMask(map, mask);
+	CreateMask(map, mask);	//creates mask (0 free / -1 player / -2 - enemy)
 	for (int i = 0; i < 10; i++)
 	{
 		for (int j = 0; j < 10; j++)
 		{
-			SetCellValue(mask, i, j);
+			SetCellValue(mask, i, j);	//give all the cells on mask strengh
 			//cout << mask[i][j] << '\t';
 		}
 		//cout << endl;
@@ -32,15 +32,15 @@ void Player_class::CreateMask(char map[11][11], int mask[10][10])
 		for (int j = 0; j < 10; j++)
 		{
 			if (map[i][j] == '.') mask[i][j] = 0;
-			else if (map[i][j] == _myFigure) mask[i][j] = -1;
-			else if (map[i][j] == _enemyFigure) mask[i][j] = -2;
+			else if (map[i][j] == _myFigure) mask[i][j] = P;
+			else if (map[i][j] == _enemyFigure) mask[i][j] = E;
 		}
 	}
 }
 
 void Player_class::SetCellValue(int mask[10][10], int y, int x)
 {
-	if (mask[y][x] == -1 || mask[y][x] == -2)
+	if (mask[y][x] == P || mask[y][x] == E)
 		return;
 
 	Dir direction[4] = 
@@ -56,9 +56,9 @@ void Player_class::SetCellValue(int mask[10][10], int y, int x)
 		bool leftRowEnd = false, leftEnd = false;
 		bool rightRowEnd = false, rightEnd = false;
 
-		int posibleLen = 1;
-		int rowLen = 0;
-		int radius = 1;
+		int posibleLen = 1;	//maximal cnt of figures posible in a row
+		int rowLen = 0;		//cnt of figures in a row
+		int radius = 1;		//distance to cell
 		while (!leftEnd || !rightEnd)
 		{
 			if (!leftEnd)
@@ -71,12 +71,12 @@ void Player_class::SetCellValue(int mask[10][10], int y, int x)
 				}
 				else
 				{
-					if (mask[checkY][checkX] == -1 && !leftRowEnd)
+					if (mask[checkY][checkX] == P && !leftRowEnd)
 					{
 						rowLen++;
 						posibleLen++;
 					}
-					else if (mask[checkY][checkX] != -2 && posibleLen < 5)
+					else if (mask[checkY][checkX] != E && posibleLen < 5)
 					{
 						leftRowEnd = true;
 						posibleLen++;
@@ -97,12 +97,12 @@ void Player_class::SetCellValue(int mask[10][10], int y, int x)
 				}
 				else
 				{
-					if (mask[checkY][checkX] == -1 && !rightRowEnd)
+					if (mask[checkY][checkX] == P && !rightRowEnd)
 					{
 						rowLen++;
 						posibleLen++;
 					}
-					else if (mask[checkY][checkX] != -2 && posibleLen < 5)
+					else if (mask[checkY][checkX] != E && posibleLen < 5)
 					{
 						rightRowEnd = true;
 						posibleLen++;

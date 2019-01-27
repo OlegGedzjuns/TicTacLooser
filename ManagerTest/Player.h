@@ -1,5 +1,8 @@
 #pragma once
 
+#define P -1
+#define E -2
+
 struct Dir
 {
 	int lY, lX;
