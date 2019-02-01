@@ -1,5 +1,7 @@
 #include "Game.h"
 
+//#include<iostream>
+
 using namespace std;
 
 bool Game_class::IsFirstStep(char map[11][11])
@@ -37,18 +39,18 @@ void Game_class::TakeAStep()
 		_communicator->PrintPos('E', 4);
 		return;
 	}
-	int playerMask[10][10];
-	int enemyMask[10][10];
 
-	_player->FillMask(map, playerMask);
-	_enemy->FillMask(map, enemyMask);
+	_player->FillMask(map);
+	_enemy->FillMask(map);
 
-	Coords place = FindBest(playerMask, enemyMask);
+	Coords place = FindBest();
+	/*std::cout << (char)place.x + 'A' << " " << place.y;
+	system("pause");*/
 	_communicator->PrintPos((char)place.x + 'A', place.y);
 	return;
 }
 
-Coords Game_class::FindBest(int pMask[10][10], int eMask[10][10])
+Coords Game_class::FindBest()
 {
 	int eMaxY = 0, eMaxX = 0;
 	int pMaxY = 0, pMaxX = 0;
@@ -56,31 +58,43 @@ Coords Game_class::FindBest(int pMask[10][10], int eMask[10][10])
 	{
 		for (int X = 0; X < 10; X++)
 		{
-			if (eMask[eMaxY][eMaxX] <= eMask[Y][X])
+			if (_enemy->mask[eMaxY][eMaxX].value < _enemy->mask[Y][X].value)
 			{
 				eMaxY = Y;
 				eMaxX = X;
 			}
-			if (pMask[pMaxY][pMaxX] <= pMask[Y][X])
+			else if (_enemy->mask[eMaxY][eMaxX].value == _enemy->mask[Y][X].value &&
+				_enemy->mask[eMaxY][eMaxX].combinations < _enemy->mask[Y][X].combinations)
+			{
+				eMaxY = Y;
+				eMaxX = X;
+			}
+			if (_player->mask[pMaxY][pMaxX].value < _player->mask[Y][X].value)
+			{
+				pMaxY = Y;
+				pMaxX = X;
+			}
+			else if (_player->mask[pMaxY][pMaxX].value == _player->mask[Y][X].value &&
+				_player->mask[pMaxY][pMaxX].combinations < _player->mask[Y][X].combinations)
 			{
 				pMaxY = Y;
 				pMaxX = X;
 			}
 		}
 	}
-	if (eMask[eMaxY][eMaxX] >= 4)
+	if (_enemy->mask[eMaxY][eMaxX].value >= 4)
 	{
 		return { eMaxX, eMaxY };
 	}
-	if (pMask[pMaxY][pMaxX] >= 3)
+	if (_player->mask[pMaxY][pMaxX].value >= 3)
 	{
 		return { pMaxX, pMaxY };
 	}
-	if (eMask[eMaxY][eMaxX] >= 2)
+	if (_enemy->mask[eMaxY][eMaxX].value >= 2)
 	{
 		return { eMaxX, eMaxY };
 	}
-	if (pMask[pMaxY][pMaxX] == 0)
+	if (_player->mask[pMaxY][pMaxX].value == 0)
 	{
 		return { eMaxX, eMaxY };
 	}

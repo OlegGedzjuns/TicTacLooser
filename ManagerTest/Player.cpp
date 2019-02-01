@@ -10,37 +10,37 @@ Player_class::Player_class(char myFigure, char enemyFigure)
 	_enemyFigure = enemyFigure;
 }
 
-void Player_class::FillMask(char map[11][11], int mask[10][10])
+void Player_class::FillMask(char map[11][11])
 {
-	CreateMask(map, mask);	//creates mask (0 free / -1 player / -2 - enemy)
+	CreateMask(map);	//creates mask (0 free / -1 player / -2 - enemy)
 	for (int i = 0; i < 10; i++)
 	{
 		for (int j = 0; j < 10; j++)
 		{
-			SetCellValue(mask, i, j);	//give all the cells on mask strengh
-			//cout << mask[i][j] << '\t';
+			SetCellValue(i, j);	//give all the cells on mask strengh
+			//cout << mask[i][j].value << "/" << mask[i][j].combinations << '\t';
 		}
 		//cout << endl;
 	}
 	//system("pause");
 }
 
-void Player_class::CreateMask(char map[11][11], int mask[10][10])
+void Player_class::CreateMask(char map[11][11])
 {
 	for (int i = 0; i < 10; i++)
 	{
 		for (int j = 0; j < 10; j++)
 		{
-			if (map[i][j] == '.') mask[i][j] = 0;
-			else if (map[i][j] == _myFigure) mask[i][j] = P;
-			else if (map[i][j] == _enemyFigure) mask[i][j] = E;
+			if (map[i][j] == '.') mask[i][j].value = 0;
+			else if (map[i][j] == _myFigure) mask[i][j].value = P;
+			else if (map[i][j] == _enemyFigure) mask[i][j].value = E;
 		}
 	}
 }
 
-void Player_class::SetCellValue(int mask[10][10], int y, int x)
+void Player_class::SetCellValue(int y, int x)
 {
-	if (mask[y][x] == P || mask[y][x] == E)
+	if (mask[y][x].value == P || mask[y][x].value == E)
 		return;
 
 	Dir direction[4] = 
@@ -71,12 +71,12 @@ void Player_class::SetCellValue(int mask[10][10], int y, int x)
 				}
 				else
 				{
-					if (mask[checkY][checkX] == P && !leftRowEnd)
+					if (mask[checkY][checkX].value == P && !leftRowEnd)
 					{
 						rowLen++;
 						posibleLen++;
 					}
-					else if (mask[checkY][checkX] != E && posibleLen < 5)
+					else if (mask[checkY][checkX].value != E && posibleLen < 5)
 					{
 						leftRowEnd = true;
 						posibleLen++;
@@ -97,12 +97,12 @@ void Player_class::SetCellValue(int mask[10][10], int y, int x)
 				}
 				else
 				{
-					if (mask[checkY][checkX] == P && !rightRowEnd)
+					if (mask[checkY][checkX].value == P && !rightRowEnd)
 					{
 						rowLen++;
 						posibleLen++;
 					}
-					else if (mask[checkY][checkX] != E && posibleLen < 5)
+					else if (mask[checkY][checkX].value != E && posibleLen < 5)
 					{
 						rightRowEnd = true;
 						posibleLen++;
@@ -115,7 +115,13 @@ void Player_class::SetCellValue(int mask[10][10], int y, int x)
 			}
 			radius++;
 		}
-		if (rowLen > mask[y][x] && posibleLen >= 5)
-			mask[y][x] = rowLen;
+		if (rowLen >= 1 && posibleLen >= 5)
+		{
+			mask[y][x].combinations++;
+		}
+		if (rowLen > mask[y][x].value && posibleLen >= 5)
+		{
+			mask[y][x].value = rowLen;
+		}
 	}
 }

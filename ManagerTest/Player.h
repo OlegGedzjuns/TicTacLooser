@@ -3,6 +3,12 @@
 #define P -1
 #define E -2
 
+struct Cell
+{
+	int value = 0;
+	int combinations = 0;
+};
+
 struct Dir
 {
 	int lY, lX;
@@ -16,12 +22,15 @@ private:
 	char _enemyFigure;
 
 public:
+
+	Cell mask[10][10];
+
 	Player_class(char myFigure, char enemyFigure);
 
-	void FillMask(char map[11][11], int mask[10][10]);
+	void FillMask(char map[11][11]);
 
-	void CreateMask(char map[11][11], int mask[10][10]);
+	void CreateMask(char map[11][11]);
 
-	void SetCellValue(int mask[10][10], int y, int x);
+	void SetCellValue(int y, int x);
 };
 

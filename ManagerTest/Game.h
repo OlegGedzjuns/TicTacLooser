@@ -21,6 +21,6 @@ public:
 	Game_class(Communication_class *communicator);
 
 	void TakeAStep();
-	Coords FindBest(int pMask[10][10], int e[10][10]);
+	Coords FindBest();
 };
 
