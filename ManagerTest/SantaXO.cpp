@@ -7,9 +7,15 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+#if _DEBUG
+	string player = "X";		//X or Y
+	string inputPath = "field.txt";		//input path
+	string outputPath = "result.txt";	//output path
+#else
 	string player = argv[1];		//X or Y
 	string inputPath = argv[2];		//input path
 	string outputPath = argv[3];	//output path
+#endif
 
 	Communication_class *communicator = new Communication_class(player[0], inputPath, outputPath);
 

@@ -1,6 +1,8 @@
 #include "Game.h"
 
-//#include<iostream>
+#if _DEBUG
+	#include<iostream>
+#endif
 
 using namespace std;
 
@@ -44,8 +46,10 @@ void Game_class::TakeAStep()
 	_enemy->FillMask(map);
 
 	Coords place = FindBest();
-	/*std::cout << (char)place.x + 'A' << " " << place.y;
-	system("pause");*/
+#if _DEBUG
+	cout << place.x << " " << place.y << endl;
+	system("pause");
+#endif
 	_communicator->PrintPos((char)place.x + 'A', place.y);
 	return;
 }

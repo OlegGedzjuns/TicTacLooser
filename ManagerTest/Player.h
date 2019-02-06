@@ -7,12 +7,15 @@ struct Cell
 {
 	int value = 0;
 	int combinations = 0;
+	bool open = false;
 };
 
 struct Dir
 {
-	int lY, lX;
-	int rY, rX;
+	int Y[2];
+	int X[2];
+	//int lY, lX;
+	//int rY, rX;
 };
 
 class Player_class

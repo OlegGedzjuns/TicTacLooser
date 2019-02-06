@@ -18,11 +18,17 @@ void Player_class::FillMask(char map[11][11])
 		for (int j = 0; j < 10; j++)
 		{
 			SetCellValue(i, j);	//give all the cells on mask strengh
-			//cout << mask[i][j].value << "/" << mask[i][j].combinations << '\t';
+#if _DEBUG
+			cout << mask[i][j].value << "/" << mask[i][j].combinations << '\t';
+#endif
 		}
-		//cout << endl;
+#if _DEBUG
+		cout << endl;
+#endif
 	}
-	//system("pause");
+#if _DEBUG
+	system("pause");
+#endif
 }
 
 void Player_class::CreateMask(char map[11][11])
@@ -43,73 +49,51 @@ void Player_class::SetCellValue(int y, int x)
 	if (mask[y][x].value == P || mask[y][x].value == E)
 		return;
 
-	Dir direction[4] = 
+	Dir direction[4] =
 	{
-		{-1, -1, +1, +1},	// (\)
-		{-1, 0, +1, 0},		// (|)
+		{-1, +1, -1, +1},	// (\)
+		{-1, +1, 0, 0},		// (|)
 		{-1, +1, +1, -1},	// (/)
-		{0, +1, 0, -1}		// (-)
+		{0, 0, +1, -1}		// (-)
 	};
 	
 	for (int i = 0; i < 4; i++)
 	{
-		bool leftRowEnd = false, leftEnd = false;
-		bool rightRowEnd = false, rightEnd = false;
+		bool rowEnd[2] = { false, false };
+		bool end[2] = { false, false };
 
 		int posibleLen = 1;	//maximal cnt of figures posible in a row
 		int rowLen = 0;		//cnt of figures in a row
 		int radius = 1;		//distance to cell
-		while (!leftEnd || !rightEnd)
+
+		while (!end[0] || !end[1])
 		{
-			if (!leftEnd)
+			for (int j = 0; j <= 1; j++)
 			{
-				int checkY = y + (radius * direction[i].lY);
-				int checkX = x + (radius * direction[i].lX);
-				if (checkY < 0 || checkY > 9 || checkX < 0 || checkX > 9)
+				if (!end[j])
 				{
-					leftEnd = true;
-				}
-				else
-				{
-					if (mask[checkY][checkX].value == P && !leftRowEnd)
+					int checkY = y + (radius * direction[i].Y[j]);
+					int checkX = x + (radius * direction[i].X[j]);
+					if (checkY < 0 || checkY > 9 || checkX < 0 || checkX > 9)
 					{
-						rowLen++;
-						posibleLen++;
-					}
-					else if (mask[checkY][checkX].value != E && posibleLen < 5)
-					{
-						leftRowEnd = true;
-						posibleLen++;
+						end[j] = true;
 					}
 					else
 					{
-						leftEnd = true;
-					}
-				}
-			}
-			if (!rightEnd)
-			{
-				int checkY = y + (radius * direction[i].rY);
-				int checkX = x + (radius * direction[i].rX);
-				if (checkY < 0 || checkY > 9 || checkX < 0 || checkX > 9)
-				{
-					rightEnd = true;
-				}
-				else
-				{
-					if (mask[checkY][checkX].value == P && !rightRowEnd)
-					{
-						rowLen++;
-						posibleLen++;
-					}
-					else if (mask[checkY][checkX].value != E && posibleLen < 5)
-					{
-						rightRowEnd = true;
-						posibleLen++;
-					}
-					else
-					{
-						rightEnd = true;
+						if (mask[checkY][checkX].value == P && !rowEnd[j])
+						{
+							rowLen++;
+							posibleLen++;
+						}
+						else if (mask[checkY][checkX].value != E && posibleLen < 5)
+						{
+							rowEnd[j] = true;
+							posibleLen++;
+						}
+						else
+						{
+							end[j] = true;
+						}
 					}
 				}
 			}
