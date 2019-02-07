@@ -68,7 +68,7 @@ Coords Game_class::FindBest()
 				eMaxX = X;
 			}
 			else if (_enemy->mask[eMaxY][eMaxX].value == _enemy->mask[Y][X].value &&
-				_enemy->mask[eMaxY][eMaxX].combinations < _enemy->mask[Y][X].combinations)
+				(_enemy->mask[eMaxY][eMaxX].combinations < _enemy->mask[Y][X].combinations || _enemy->mask[Y][X].open))
 			{
 				eMaxY = Y;
 				eMaxX = X;
@@ -79,28 +79,32 @@ Coords Game_class::FindBest()
 				pMaxX = X;
 			}
 			else if (_player->mask[pMaxY][pMaxX].value == _player->mask[Y][X].value &&
-				_player->mask[pMaxY][pMaxX].combinations < _player->mask[Y][X].combinations)
+				(_player->mask[pMaxY][pMaxX].combinations < _player->mask[Y][X].combinations || _player->mask[Y][X].open))
 			{
 				pMaxY = Y;
 				pMaxX = X;
 			}
 		}
 	}
+	if (_player->mask[pMaxY][pMaxX].value >= 4)
+	{
+		return { pMaxX, pMaxY };
+	}
 	if (_enemy->mask[eMaxY][eMaxX].value >= 4)
 	{
 		return { eMaxX, eMaxY };
 	}
-	if (_player->mask[pMaxY][pMaxX].value >= 3)
+	if (_player->mask[pMaxY][pMaxX].value >= 3 && _player->mask[pMaxY][pMaxX].open)
 	{
 		return { pMaxX, pMaxY };
 	}
-	if (_enemy->mask[eMaxY][eMaxX].value >= 2)
+	if (_enemy->mask[eMaxY][eMaxX].value >= 3 && _enemy->mask[eMaxY][eMaxX].open)
 	{
 		return { eMaxX, eMaxY };
 	}
-	if (_player->mask[pMaxY][pMaxX].value == 0)
+	if (_player->mask[pMaxY][pMaxX].value > _enemy->mask[eMaxY][eMaxX].value)
 	{
-		return { eMaxX, eMaxY };
+		return { pMaxX, pMaxY };
 	}
-	return { pMaxX, pMaxY };
+	return { eMaxX, eMaxY };
 }

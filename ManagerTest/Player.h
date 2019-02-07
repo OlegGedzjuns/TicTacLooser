@@ -14,8 +14,6 @@ struct Dir
 {
 	int Y[2];
 	int X[2];
-	//int lY, lX;
-	//int rY, rX;
 };
 
 class Player_class

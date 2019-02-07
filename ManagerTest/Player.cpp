@@ -19,7 +19,10 @@ void Player_class::FillMask(char map[11][11])
 		{
 			SetCellValue(i, j);	//give all the cells on mask strengh
 #if _DEBUG
-			cout << mask[i][j].value << "/" << mask[i][j].combinations << '\t';
+			cout << mask[i][j].value;
+			if (mask[i][j].open)
+				cout << "+";
+			cout << "\t";
 #endif
 		}
 #if _DEBUG
@@ -61,6 +64,7 @@ void Player_class::SetCellValue(int y, int x)
 	{
 		bool rowEnd[2] = { false, false };
 		bool end[2] = { false, false };
+		bool open[2] = { false, false };
 
 		int posibleLen = 1;	//maximal cnt of figures posible in a row
 		int rowLen = 0;		//cnt of figures in a row
@@ -85,10 +89,18 @@ void Player_class::SetCellValue(int y, int x)
 							rowLen++;
 							posibleLen++;
 						}
-						else if (mask[checkY][checkX].value != E && posibleLen < 5)
+						else if (mask[checkY][checkX].value != E)
 						{
-							rowEnd[j] = true;
-							posibleLen++;
+							open[j] = true;
+							if (posibleLen < 5)
+							{
+								rowEnd[j] = true;
+								posibleLen++;
+							}
+							else
+							{
+								end[j] = true;
+							}
 						}
 						else
 						{
@@ -105,6 +117,10 @@ void Player_class::SetCellValue(int y, int x)
 		}
 		if (rowLen > mask[y][x].value && posibleLen >= 5)
 		{
+			if (open[0] && open[1])
+			{
+				mask[y][x].open = true;
+			}
 			mask[y][x].value = rowLen;
 		}
 	}
