@@ -104,7 +104,10 @@ Coords Game_class::FindBest()
 	}
 	if (_player->mask[pMaxY][pMaxX].value > _enemy->mask[eMaxY][eMaxX].value)
 	{
-		return { pMaxX, pMaxY };
+		if(_enemy->mask[eMaxY][eMaxX].open && _player->mask[pMaxY][pMaxX].value - _enemy->mask[eMaxY][eMaxX].value > 1)
+			return { pMaxX, pMaxY };
+		if (!_enemy->mask[eMaxY][eMaxX].open)
+			return { pMaxX, pMaxY };
 	}
 	return { eMaxX, eMaxY };
 }
