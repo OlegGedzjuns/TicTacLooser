@@ -15,12 +15,10 @@ private:
 	Player_class *_player;
 	Player_class *_enemy;
 	Communication_class *_communicator;
-
 	bool IsFirstStep(char map[11][11]);
 public:
 	Game_class(Communication_class *communicator);
-
 	void TakeAStep();
-	Coords FindBest();
+	Coords FindBest(char map[11][11]);
 };
 

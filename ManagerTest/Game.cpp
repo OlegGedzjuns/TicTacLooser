@@ -41,11 +41,7 @@ void Game_class::TakeAStep()
 		_communicator->PrintPos('E', 4);
 		return;
 	}
-
-	_player->FillMask(map);
-	_enemy->FillMask(map);
-
-	Coords place = FindBest();
+	Coords place = FindBest(map);
 #if _DEBUG
 	cout << place.x << " " << place.y << endl;
 	system("pause");
@@ -54,20 +50,22 @@ void Game_class::TakeAStep()
 	return;
 }
 
-Coords Game_class::FindBest()
+Coords Game_class::FindBest(char map[11][11])
 {
-	int pFieldStrenght = 0;
-	int eFieldStrenght = 0;
-	for (int Y = 0; Y < 10; Y++)
+	int pFieldStrenght = _player->FillMask(map);
+	int eFieldStrenght = _enemy->FillMask(map);
+	/*for (int Y = 0; Y < 10; Y++)
 	{
 		for (int X = 0; X < 10; X++)
 		{
 			pFieldStrenght += _player->mask[Y][X].combinations * _player->mask[Y][X].value;
 			eFieldStrenght += _enemy->mask[Y][X].combinations * _enemy->mask[Y][X].value;
 		}
-	}
+	}*/
+	double strnCoef = (double)pFieldStrenght / (double)eFieldStrenght;
 #if _DEBUG
 	cout << pFieldStrenght << " " << eFieldStrenght << endl;
+	cout << strnCoef << endl;
 	system("pause");
 #endif
 	int eMaxY = 0, eMaxX = 0;
