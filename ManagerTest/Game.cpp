@@ -56,6 +56,20 @@ void Game_class::TakeAStep()
 
 Coords Game_class::FindBest()
 {
+	int pFieldStrenght = 0;
+	int eFieldStrenght = 0;
+	for (int Y = 0; Y < 10; Y++)
+	{
+		for (int X = 0; X < 10; X++)
+		{
+			pFieldStrenght += _player->mask[Y][X].combinations * _player->mask[Y][X].value;
+			eFieldStrenght += _enemy->mask[Y][X].combinations * _enemy->mask[Y][X].value;
+		}
+	}
+#if _DEBUG
+	cout << pFieldStrenght << " " << eFieldStrenght << endl;
+	system("pause");
+#endif
 	int eMaxY = 0, eMaxX = 0;
 	int pMaxY = 0, pMaxX = 0;
 	for (int Y = 0; Y < 10; Y++)
