@@ -27,13 +27,13 @@ private:
 		{-1, +1, +1, -1},	// (/)
 		{0, 0, +1, -1}		// (-)
 	};
-	char _myFigure;
-	char _enemyFigure;
 public:
+	char myFigure;
+	char enemyFigure;
 	Cell mask[10][10];
 	Player_class(char myFigure, char enemyFigure);
-	int FillMask(char map[11][11]);
-	void CreateMask(char map[11][11]);
+	int FillMask(char map[10][11]);
+	void CreateMask(char map[10][11]);
 	void SetCellValue(int y, int x);
 };
 

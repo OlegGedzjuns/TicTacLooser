@@ -8,11 +8,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 #if _DEBUG
-	string player = "X";		//X or Y
+	string player = "X";		//X or 0
 	string inputPath = "field.txt";		//input path
 	string outputPath = "result.txt";	//output path
 #else
-	string player = argv[1];		//X or Y
+	string player = argv[1];		//X or 0
 	string inputPath = argv[2];		//input path
 	string outputPath = argv[3];	//output path
 #endif

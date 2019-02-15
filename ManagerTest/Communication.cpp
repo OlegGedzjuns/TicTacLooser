@@ -28,7 +28,7 @@ char Communication_class::GetFigure()
 	return _figure;
 }
 
-void Communication_class::GetMap(char map[11][11])
+void Communication_class::GetMap(char map[10][11])
 {
 	for (int i = 0; i < 10; i++)
 	{

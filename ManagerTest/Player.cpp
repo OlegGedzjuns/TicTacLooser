@@ -1,18 +1,19 @@
 #include "Player.h"
 
 #include <cmath>
-#include <iostream>
+#if _DEBUG
+	#include <iostream>
+#endif
 
 using namespace std;
 
-Player_class::Player_class(char myFigure, char enemyFigure)
+Player_class::Player_class(char MyFigure, char EnemyFigure)
 {
-	_myFigure = myFigure;
-	_enemyFigure = enemyFigure;
-	
+	myFigure = MyFigure;
+	enemyFigure = EnemyFigure;
 }
 
-int Player_class::FillMask(char map[11][11])
+int Player_class::FillMask(char map[10][11])
 {
 	int fieldStrenght = 0;
 	CreateMask(map);	//creates mask (0 free / -1 player / -2 - enemy)
@@ -21,6 +22,10 @@ int Player_class::FillMask(char map[11][11])
 		for (int j = 0; j < 10; j++)
 		{
 			SetCellValue(i, j);	//give all the cells on mask strengh
+			if (mask[i][j].value >= 3 && mask[i][j].open)
+			{
+				mask[i][j].strenght *= 2;
+			}
 			fieldStrenght += mask[i][j].strenght;
 #if _DEBUG
 			cout << mask[i][j].value;
@@ -34,20 +39,38 @@ int Player_class::FillMask(char map[11][11])
 #endif
 	}
 #if _DEBUG
-	system("pause");
+	//system("pause");
 #endif
 	return fieldStrenght;
 }
 
-void Player_class::CreateMask(char map[11][11])
+void Player_class::CreateMask(char map[10][11])
 {
 	for (int i = 0; i < 10; i++)
 	{
 		for (int j = 0; j < 10; j++)
 		{
-			//if (map[i][j] == '.') mask[i][j].value = 0;
-			if (map[i][j] == _myFigure) mask[i][j].value = P;
-			else if (map[i][j] == _enemyFigure) mask[i][j].value = E;
+			if (map[i][j] == '.')
+			{
+				mask[i][j].value = 0;
+				mask[i][j].combinations = 0;
+				mask[i][j].strenght = 0;
+				mask[i][j].open = false;
+			}
+			else if (map[i][j] == myFigure)
+			{
+				mask[i][j].value = P;
+				mask[i][j].combinations = 0;
+				mask[i][j].strenght = 0;
+				mask[i][j].open = false;
+			}
+			else if (map[i][j] == enemyFigure)
+			{
+				mask[i][j].value = E;
+				mask[i][j].combinations = 0;
+				mask[i][j].strenght = 0;
+				mask[i][j].open = false;
+			}
 		}
 	}
 }
@@ -108,6 +131,7 @@ void Player_class::SetCellValue(int y, int x)
 			}
 			radius++;
 		}
+
 		if (rowLen >= 1 && posibleLen >= 5)
 		{
 			mask[y][x].combinations++;

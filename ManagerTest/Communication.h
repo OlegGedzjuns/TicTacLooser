@@ -18,6 +18,6 @@ public:
 	void PrintInfo();
 	void PrintPos(char c, int i);
 	char GetFigure();
-	void GetMap(char map[11][11]);
+	void GetMap(char map[10][11]);
 };
 

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-bool Game_class::IsFirstStep(char map[11][11])
+bool Game_class::IsFirstStep(char map[10][11])
 {
 	for (int i = 0; i < 10; i++)
 	{
@@ -50,18 +50,10 @@ void Game_class::TakeAStep()
 	return;
 }
 
-Coords Game_class::FindBest(char map[11][11])
+Coords Game_class::FindBest(char map[10][11])
 {
 	int pFieldStrenght = _player->FillMask(map);
 	int eFieldStrenght = _enemy->FillMask(map);
-	/*for (int Y = 0; Y < 10; Y++)
-	{
-		for (int X = 0; X < 10; X++)
-		{
-			pFieldStrenght += _player->mask[Y][X].combinations * _player->mask[Y][X].value;
-			eFieldStrenght += _enemy->mask[Y][X].combinations * _enemy->mask[Y][X].value;
-		}
-	}*/
 	double strnCoef = (double)pFieldStrenght / (double)eFieldStrenght;
 #if _DEBUG
 	cout << pFieldStrenght << " " << eFieldStrenght << endl;
@@ -80,7 +72,7 @@ Coords Game_class::FindBest(char map[11][11])
 				eMaxX = X;
 			}
 			else if (_enemy->mask[eMaxY][eMaxX].value == _enemy->mask[Y][X].value &&
-				(_enemy->mask[eMaxY][eMaxX].combinations < _enemy->mask[Y][X].combinations /*|| _enemy->mask[Y][X].open*/))
+				(_enemy->mask[eMaxY][eMaxX].combinations <= _enemy->mask[Y][X].combinations && ( (_enemy->mask[Y][X].open && !_enemy->mask[eMaxY][eMaxX].open) || (_enemy->mask[Y][X].open && _enemy->mask[eMaxY][eMaxX].open) ) ) )	//in fact, I myself do not know what this line does, this line is so scary
 			{
 				eMaxY = Y;
 				eMaxX = X;
@@ -91,38 +83,17 @@ Coords Game_class::FindBest(char map[11][11])
 				pMaxX = X;
 			}
 			else if (_player->mask[pMaxY][pMaxX].value == _player->mask[Y][X].value &&
-				(_player->mask[pMaxY][pMaxX].combinations < _player->mask[Y][X].combinations /*|| _player->mask[Y][X].open*/))
+				(_player->mask[pMaxY][pMaxX].combinations <= _player->mask[Y][X].combinations && ((_player->mask[Y][X].open && !_player->mask[pMaxY][pMaxX].open) || (_player->mask[Y][X].open && _player->mask[pMaxY][pMaxX].open))))
 			{
 				pMaxY = Y;
 				pMaxX = X;
 			}
 		}
 	}
-	/*if (_player->mask[pMaxY][pMaxX].value >= 4)
+	if (_player->mask[pMaxY][pMaxX].value >= 4)
 	{
 		return { pMaxX, pMaxY };
 	}
-	if (_enemy->mask[eMaxY][eMaxX].value >= 4)
-	{
-		return { eMaxX, eMaxY };
-	}
-	if (_player->mask[pMaxY][pMaxX].value >= 3 && _player->mask[pMaxY][pMaxX].open)
-	{
-		return { pMaxX, pMaxY };
-	}
-	if (_enemy->mask[eMaxY][eMaxX].value >= 3 && _enemy->mask[eMaxY][eMaxX].open)
-	{
-		return { eMaxX, eMaxY };
-	}
-	if (_player->mask[pMaxY][pMaxX].value > _enemy->mask[eMaxY][eMaxX].value)
-	{
-		if(_enemy->mask[eMaxY][eMaxX].open && _player->mask[pMaxY][pMaxX].value - _enemy->mask[eMaxY][eMaxX].value > 1)
-			return { pMaxX, pMaxY };
-		if (!_enemy->mask[eMaxY][eMaxX].open)
-			return { pMaxX, pMaxY };
-	}
-	return { eMaxX, eMaxY };*/
-
 	if (_enemy->mask[eMaxY][eMaxX].value >= 4)
 	{
 		return { eMaxX, eMaxY };
